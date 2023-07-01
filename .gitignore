@@ -3,3 +3,4 @@
 *.py[cod]
 pynecone.db
 __pycache__/
+.python-version
