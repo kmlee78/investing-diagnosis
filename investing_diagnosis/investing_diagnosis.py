@@ -1,4 +1,3 @@
-"""Welcome to Pynecone! This file outlines the steps to create a basic app."""
 from pcconfig import config
 
 import pynecone as pc
@@ -8,38 +7,48 @@ filename = f"{config.app_name}/{config.app_name}.py"
 
 
 class State(pc.State):
-    """The app state."""
+    text: str
 
-    pass
+    def set_text(self, text: str):
+        self.text = text
 
 
+@pc.route(route="/", title="나의 투자 성향은?")
 def index() -> pc.Component:
-    return pc.fragment(
-        pc.color_mode_button(pc.color_mode_icon(), float="right"),
+    return pc.center(
         pc.vstack(
-            pc.heading("Welcome to Pynecone!", font_size="2em"),
-            pc.box("Get started by editing ", pc.code(filename, font_size="1em")),
-            pc.link(
-                "Check out our docs!",
-                href=docs_url,
-                border="0.1em solid",
-                padding="0.5em",
-                border_radius="0.5em",
-                _hover={
-                    "color": pc.color_mode_cond(
-                        light="rgb(107,99,246)",
-                        dark="rgb(179, 175, 255)",
-                    )
-                },
+            pc.heading("나의 투자 성향에 대해 알아보아요!", font_size="5em"),
+            pc.input(
+                on_change=State.set_text,
+                placeholder="이름을 입력해주세요.",
+                width="30%",
             ),
-            spacing="1.5em",
-            font_size="2em",
-            padding_top="10%",
+            pc.link(
+                pc.button(
+                    "시작!",
+                    background_color="green",
+                    size="lg",
+                ),
+                href="/go",
+                button=True,
+            ),
+            spacing="3em",
         ),
+        background_image="/bonobono.jpg",
+        background_position="center",
+        background_size="cover",
+        background_repeat="no-repeat",
+        height="100vh",
     )
 
 
-# Add state and page to the app.
+@pc.route(route="/go", title="시작")
+def start() -> pc.Component:
+    name = State.text
+    return pc.vstack(
+        pc.text(f"{name}님, 환영합니다.", font_size="5em"),
+    )
+
+
 app = pc.App(state=State)
-app.add_page(index)
 app.compile()
