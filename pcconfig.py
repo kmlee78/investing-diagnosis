@@ -1,7 +1,9 @@
 import pynecone as pc
 
+
 class InvestingdiagnosisConfig(pc.Config):
     pass
+
 
 config = InvestingdiagnosisConfig(
     app_name="investing_diagnosis",
